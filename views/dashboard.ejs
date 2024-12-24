@@ -1,0 +1,34 @@
+<div class="nav justify-content-end">
+  <a href="/admin/add" class="btn btn-dark">Add Data</a>
+</div>
+<table class="table mt-5">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Judul</th>
+      <th scope="col">Penulis</th>
+      <th scope="col">Tahun terbit</th>
+      <th scope="col">Category</th>
+      <th scope="col">Stok</th>
+      <th scope="col" class="text-center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% books.forEach(book => { %>
+    <tr>
+      <th scope="row" class="align-middle"><%= book.id %></th>
+      <td class="align-middle"><%= book.judul %></td>
+      <td class="align-middle"><%= book.penulis %></td>
+      <td class="align-middle"><%= book.tahunTerbit %></td>
+      <td class="align-middle"><%= book.kategori %></td>
+      <td class="align-middle"><%= book.stok %></td>
+      <td class="align-middle">
+        <div class="d-flex justify-content-center">
+          <a class="btn btn-success me-2">Edit</a>
+          <a href="/delete/<%= book.id %>" class="btn btn-danger">Hapus</a>
+        </div>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
