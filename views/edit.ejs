@@ -1,0 +1,61 @@
+<form method="post" action="/edit/:id" class="mt-5">
+  <input type="hidden" name="id" value="<%= books.id %>" />
+  <div class="form-floating mb-3">
+    <input
+      type="text"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Judul Buku"
+      name="judul"
+      value="<%=books.judul%>"
+    />
+    <label for="floatingInput">Judul</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input
+      type="text"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Nama Penulis"
+      name="penulis"
+      value="<%= books.penulis %>"
+    />
+    <label for="floatingInput">Penulis</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input
+      type="number"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Tahun Buku Diterbitkan"
+      name="tahunTerbit"
+      value="<%= books.tahunTerbit %>"
+    />
+    <label for="floatingInput">Tahun Terbit</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input
+      type="text"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Kategori Buku"
+      name="kategori"
+      value="<%= books.kategori %>"
+    />
+    <label for="floatingInput">Kategori</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input
+      type="number"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Stok Buku"
+      name="stok"
+      value="<%= books.stok %>"
+    />
+    <label for="floatingInput">Stok</label>
+  </div>
+  <div class="nav justify-content-end">
+    <button type="submit" class="btn btn-dark">Update Data</button>
+  </div>
+</form>

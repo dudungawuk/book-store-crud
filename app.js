@@ -1,7 +1,12 @@
 const express = require("express");
 const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
-const { getBuku, deleteBookUsingID, addBook } = require("./utils/books.js");
+const {
+  getBuku,
+  deleteBookUsingID,
+  addBook,
+  getBukuUsingID,
+} = require("./utils/books.js");
 const { redirect } = require("next/dist/server/api-utils/index.js");
 const app = express();
 const port = 3000;
@@ -37,6 +42,30 @@ app.get("/admin", (req, res) => {
 app.get("/delete/:id", (req, res) => {
   const bookid = req.params.id;
   deleteBookUsingID(bookid);
+  res.redirect("/admin");
+});
+
+app.get("/admin/edit/:id", (req, res) => {
+  const Bookid = req.params.id;
+  getBukuUsingID(Bookid)
+    .then((books) => {
+      res.render("edit", {
+        title: "Add Data Book", // Judul halaman
+        layout: "partials/main-layout", // Layout yang digunakan
+        books: books[0],
+      });
+    })
+    .catch((err) => {
+      throw err;
+    });
+});
+
+app.post("/edit/:id", (req, res) => {
+  const { id, judul, penulis, tahunTerbit, kategori, stok } = req.body;
+  console.log(id, judul, penulis, tahunTerbit, kategori, stok);
+
+  updateBookByID(id, judul, penulis, tahunTerbit, kategori, stok);
+
   res.redirect("/admin");
 });
 

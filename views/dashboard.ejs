@@ -24,8 +24,12 @@
       <td class="align-middle"><%= book.stok %></td>
       <td class="align-middle">
         <div class="d-flex justify-content-center">
-          <a class="btn btn-success me-2">Edit</a>
-          <a href="/delete/<%= book.id %>" class="btn btn-danger">Hapus</a>
+          <a href="/admin/edit/<%=book.id%>" class="btn btn-success me-2"
+            >Edit</a
+          >
+          <a onclick="confirmDelete(`<%= book.id %>`)" class="btn btn-danger"
+            >Hapus</a
+          >
         </div>
       </td>
     </tr>

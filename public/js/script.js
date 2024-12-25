@@ -14,3 +14,19 @@
 // SelfDev.addEventListener("click", () => {
 //   categoryDropdown.innerHTML = SelfDev.innerHTML;
 // });
+
+function confirmDelete(id) {
+  console.log(`Menghapus buku dengan ID: ${id}`);
+  const userConfirmed = confirm("Apakah Anda yakin ingin menghapus data ini?");
+  if (userConfirmed) {
+    window.location.href = `/delete/${id}`;
+  }
+}
+
+document.querySelector("form").addEventListener("submit", function (e) {
+  const tahunTerbit = document.querySelector("[name='tahunTerbit']").value;
+  if (!tahunTerbit || isNaN(tahunTerbit)) {
+    e.preventDefault(); // Mencegah form untuk disubmit
+    alert("Tahun Terbit harus berupa angka yang valid.");
+  }
+});
