@@ -1,4 +1,14 @@
-<form method="post" action="/edit/:id" class="mt-5">
+<form
+  method="post"
+  action="/edit/:id"
+  enctype="multipart/form-data"
+  class="mt-5"
+>
+  <input
+    type="hidden"
+    name="old_gambar_path"
+    value="<%= books.gambar_path %>"
+  />
   <input type="hidden" name="id" value="<%= books.id %>" />
   <div class="form-floating mb-3">
     <input
@@ -55,6 +65,24 @@
     />
     <label for="floatingInput">Stok</label>
   </div>
+  <div class="mb-3">
+    <% if (books.gambar_path) { %>
+    <img
+      src="/uploads/<%= books.gambar_path %>"
+      alt="Gambar Buku"
+      class="img-thumbnail mb-2"
+      style="width: 150px; height: auto"
+    />
+    <% } %>
+    <input
+      type="file"
+      name="gambar_path"
+      accept="image/*"
+      class="custom-file-input"
+      id="inputGroupFile01"
+    />
+  </div>
+
   <div class="nav justify-content-end">
     <button type="submit" class="btn btn-dark">Update Data</button>
   </div>

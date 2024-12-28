@@ -10,6 +10,7 @@
       <th scope="col">Tahun terbit</th>
       <th scope="col">Category</th>
       <th scope="col">Stok</th>
+      <th scope="col">Gambar</th>
       <th scope="col" class="text-center">Action</th>
     </tr>
   </thead>
@@ -22,6 +23,15 @@
       <td class="align-middle"><%= book.tahunTerbit %></td>
       <td class="align-middle"><%= book.kategori %></td>
       <td class="align-middle"><%= book.stok %></td>
+      <td>
+        <% if (book.gambar_path) { %>
+        <img
+          src="/uploads/<%= book.gambar_path %>"
+          alt="Gambar Buku"
+          width="100"
+        />
+        <% } %>
+      </td>
       <td class="align-middle">
         <div class="d-flex justify-content-center">
           <a href="/admin/edit/<%=book.id%>" class="btn btn-success me-2"

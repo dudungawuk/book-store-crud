@@ -6,6 +6,7 @@ const {
   deleteBookUsingID,
   addBook,
   getBukuUsingID,
+  upload,
 } = require("./utils/books.js");
 const { redirect } = require("next/dist/server/api-utils/index.js");
 const app = express();
@@ -15,18 +16,48 @@ const port = 3000;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
 app.use(expressLayouts);
 app.use(express.urlencoded({ extended: true })); // Menangani data form-urlencoded
 
+const isAuthenticated = (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect("/login"); // Redirect ke login jika belum login
+  }
+  next();
+};
+
+const isAdmin = (req, res, next) => {
+  if (req.session.user.role !== "admin") {
+    return res.status(403).send("Akses ditolak: Anda bukan admin.");
+  }
+  next();
+};
+
 // Route untuk halaman utama
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  const books = await getBuku();
   res.render("index", {
+    books,
     title: "Home Page", // Judul halaman
     layout: "partials/main-layout", // Layout yang digunakan
   });
 });
+app.get("/login", (req, res) => {
+  console.log(req.body);
 
-app.get("/admin", (req, res) => {
+  res.render("login", {
+    title: "Login Page",
+    layout: "partials/main-layout",
+  });
+});
+
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  res.redirect("/admin");
+});
+
+app.get("/admin", isAuthenticated(), isAdmin(), (req, res) => {
   getBuku()
     .then((books) => {
       res.render("dashboard", {
@@ -60,11 +91,11 @@ app.get("/admin/edit/:id", (req, res) => {
     });
 });
 
-app.post("/edit/:id", (req, res) => {
+app.post("/edit/:id", upload.single("gambar_path"), (req, res) => {
   const { id, judul, penulis, tahunTerbit, kategori, stok } = req.body;
-  console.log(id, judul, penulis, tahunTerbit, kategori, stok);
+  const gambarPath = req.file ? req.file.filename : req.body.old_gambar_path;
 
-  updateBookByID(id, judul, penulis, tahunTerbit, kategori, stok);
+  updateBookByID(id, judul, penulis, tahunTerbit, kategori, stok, gambarPath);
 
   res.redirect("/admin");
 });
@@ -76,9 +107,13 @@ app.get("/admin/add", (req, res) => {
   });
 });
 
-app.post("/add", (req, res) => {
+app.post("/add", upload.single("gambar"), (req, res) => {
   const { judul, penulis, tahunTerbit, kategori, stok } = req.body;
-  addBook(judul, penulis, tahunTerbit, kategori, stok);
+  const gambar = req.file ? req.file.filename : null;
+
+  // Panggil fungsi untuk menambahkan buku, sertakan path gambar
+  addBook(judul, penulis, tahunTerbit, kategori, stok, gambar);
+
   res.redirect("/admin");
 });
 

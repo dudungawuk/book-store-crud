@@ -1,4 +1,4 @@
-<form method="POST" action="/add" class="mt-5">
+<form method="POST" action="/add" enctype="multipart/form-data" class="mt-5">
   <div class="form-floating mb-3">
     <input
       type="text"
@@ -48,6 +48,20 @@
       name="stok"
     />
     <label for="floatingInput">Stok</label>
+  </div>
+  <div class="form-floating mb-3 justify-content-center d-flex">
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input
+          type="file"
+          name="gambar"
+          accept="image/*"
+          required
+          class="custom-file-input"
+          id="inputGroupFile01"
+        />
+      </div>
+    </div>
   </div>
 
   <!-- Button Submit -->

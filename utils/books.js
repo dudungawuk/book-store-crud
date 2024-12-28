@@ -1,4 +1,8 @@
 const mysql = require("mysql2");
+const multer = require("multer");
+const path = require("path");
+const bcrypt = require("bcrypt");
+
 require("dotenv").config();
 
 const connection = mysql.createConnection({
@@ -10,6 +14,17 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) throw err;
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Folder untuk menyimpan gambar
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Nama file unik
+  },
+});
+
+const upload = multer({ storage });
 
 getBuku = () => {
   return new Promise((resolve, reject) => {
@@ -54,25 +69,39 @@ deleteAllDataBook = () => {
   });
 };
 
-addBook = (judul, penulis, tahunTerbit, kategori, stok) => {
-  console.log("Menambahkan Buku ke database....");
-  // Query SQL menggunakan parameterized query untuk mencegah SQL Injection
-  query = `INSERT INTO buku(judul,penulis,tahunTerbit,kategori,stok) VALUES (?, ?, ?, ?, ?) `;
+addBook = (judul, penulis, tahunTerbit, kategori, stok, gambar) => {
+  const query = `
+    INSERT INTO buku (judul, penulis, tahunTerbit, kategori, stok, gambar_path) 
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
   connection.query(
     query,
-    [judul, penulis, tahunTerbit, kategori, stok],
-    (err) => {
-      if (err) throw err;
-      console.log("Data Berhasil Ditambahkan!");
+    [judul, penulis, tahunTerbit, kategori, stok, gambar],
+    (err, result) => {
+      if (err) {
+        console.error("Error saat menambahkan buku:", err);
+        throw err;
+      }
+      console.log("Buku berhasil ditambahkan!");
     }
   );
 };
-updateBookByID = (id, judul, penulis, tahunTerbit, kategori, stok) => {
+
+updateBookByID = (
+  id,
+  judul,
+  penulis,
+  tahunTerbit,
+  kategori,
+  stok,
+  gambar_path
+) => {
   query =
-    "UPDATE buku SET judul = ?,penulis = ?,tahunTerbit = ?,kategori = ?,stok = ? where id = ?";
+    "UPDATE buku SET judul = ?,penulis = ?,tahunTerbit = ?,kategori = ?,stok = ?, gambar_path = ? where id = ?";
   connection.query(
     query,
-    [judul, penulis, tahunTerbit, kategori, stok, id],
+    [judul, penulis, tahunTerbit, kategori, stok, gambar_path, id],
     (err, result) => {
       if (err) throw err;
       if (result.affectedRows === 0) {
@@ -134,6 +163,7 @@ module.exports = {
   addBook,
   getBukuUsingID,
   updateBookByID,
+  upload,
 };
 
 // const books = await getBuku();
